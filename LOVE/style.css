@@ -136,7 +136,7 @@ button {
 
 #finalLine {
   position: fixed;
-  bottom: 20%;
+  margin-top:10px;
   width: 100%;
   text-align: center;
   font-size: 2rem;
@@ -294,4 +294,5 @@ button {
 
 
  
+
 
