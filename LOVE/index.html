@@ -6,60 +6,48 @@
   <title>Pour Kadige 💖</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,500&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
 
-  <!-- 🎵 Musique -->
+  <!-- Background Music -->
   <audio id="bgMusic" preload="auto">
     <source src="music.mp3" type="audio/mpeg">
     Ton navigateur ne supporte pas l’audio.
   </audio>
 
-  <!-- 🎬 Background -->
+  <!-- Background & Overlay -->
   <div class="background"></div>
   <div class="overlay"></div>
 
   <main class="container">
-
+    <!-- Profile Picture -->
     <div class="profile-pic">
-  <img id="profileImage" src="kd2.jpg" alt="Kadige">
-</div>
+      <img id="profileImage" src="kd1.jpg" alt="Kadige">
+    </div>
 
-
-
-
-
+    <!-- Header -->
     <h1>
-      Pour toi, <span id="herName">Kadige 💖</span>
-💖<br><br>
-      Depuis 1 an, nos âmes dansent sous les mêmes étoiles...<br>
-      Bébé... tu es la reine de mon royaume.<br><br>
+      Pour toi, <span id="herName">Kadige 💖</span><br>
       <span id="myName">Ton Njibah 💫</span>
-
     </h1>
 
+    <!-- Counter -->
     <div id="counter"></div>
 
+    <!-- Reveal Button -->
     <button id="revealBtn">💖 Clique ici mon amour</button>
-
-    <!-- 🎵 Contrôle musique -->
     <button id="musicBtn" class="music-btn hidden">⏸️ Pause musique</button>
 
-     <!-- message-long -->
+    <!-- Secret Message -->
     <div id="secretMessage"></div>
 
-
+    <!-- Final Line -->
     <div id="finalLine">Rien ne nous vaincra 💖</div>
 
-    <canvas id="fireworksCanvas"></canvas>
-
-
+    <!-- Confetti Canvas -->
+    <canvas id="confettiCanvas"></canvas>
   </main>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
