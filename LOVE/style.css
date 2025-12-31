@@ -42,7 +42,7 @@ body {
 /* 💖 Contenu */
 body {
   min-height: 100vh;
-  font-family: "Segoe UI", sans-serif;
+ 
   color: white;
   display: flex;
   justify-content: center;
@@ -150,7 +150,27 @@ button {
   to { opacity: 1; }
 }
 
+/*style du feu d'antifixe  */
+.firework {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd6e0, #ff4d6d);
+  animation: explode 1.8s ease-out forwards;
+  z-index: 0; /* derrière le texte */
+}
 
+@keyframes explode {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(12);
+    opacity: 0;
+  }
+}
 
 
 
@@ -294,6 +314,7 @@ button {
 
 
  
+
 
 
 
