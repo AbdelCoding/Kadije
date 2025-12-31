@@ -1,46 +1,23 @@
-
+// Elements
 const revealBtn = document.getElementById("revealBtn");
 const musicBtn = document.getElementById("musicBtn");
 const music = document.getElementById("bgMusic");
 const secretMessage = document.getElementById("secretMessage");
 const counter = document.getElementById("counter");
-const profileImage = document.getElementById("profileImage");
 const herName = document.getElementById("herName");
 const myName = document.getElementById("myName");
+const profileImg = document.getElementById("profileImage");
+const finalLine = document.getElementById("finalLine");
+const confettiCanvas = document.getElementById("confettiCanvas");
+const ctx = confettiCanvas.getContext("2d");
 
-let typingTimeout = null;
-let isPaused = false;
-let index = 0;
+// Photos
+const photos = ["kd1.jpg","kd2.jpg","kd3.jpg","kd4.jpg","kd5.jpg","kd6.jpg"];
+let photoIndex = 0;
+let photoInterval = null;
 
-/* ⏳ COMPTEUR */
-const startDate = new Date("2024-02-14");
-
-function updateCounter() {
-  const now = new Date();
-  const diff = now - startDate;
-
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff / 3600000) % 24);
-  const minutes = Math.floor((diff / 60000) % 60);
-
-  counter.innerHTML = `💖 ${days} jours ${hours}h ${minutes}min d'amour`;
-}
-setInterval(updateCounter, 1000);
-updateCounter();
-
-/* 💖 CŒURS */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "💖";
-  heart.style.left = Math.random() * 100 + "vw";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 7000);
-}
-
-/* 💌 TEXTE EXACT (INCHANGÉ) */
-const longMessage = `
-Kadige…
+// Text
+const longMessage = `Kadige…
 
 Il y a des personnes qui passent dans une vie,
 et il y a celles qui deviennent la vie elle-même.
@@ -66,91 +43,106 @@ Kadige, je te choisis.
 Aujourd’hui. Demain.
 Pour la vie.
 
-— Ton  Njibah 💫
-`;
+— Ton Njibah 💫`;
 
-secretMessage.innerHTML = "";
+let textIndex = 0;
+let textTimer = null;
 
-/* ✍️ ÉCRITURE LENTE (PAUSE SAFE) */
-function showMessageSlowly() {
-  if (index < longMessage.length && !isPaused) {
-    secretMessage.innerHTML += longMessage.charAt(index);
-    index++;
-    typingTimeout = setTimeout(showMessageSlowly, 90);
-  }
+// Hearts
+let heartsInterval = null;
+function createHeart(){
+  const heart = document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="💖";
+  heart.style.left=Math.random()*100+"vw";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),7000);
 }
+function startHearts(){ heartsInterval=setInterval(createHeart,400); }
+function stopHearts(){ clearInterval(heartsInterval); }
 
-/* 🖼️ SLIDESHOW */
-const photos = ["kd1.jpg", "kd5.jpg", "kd2.jpg", "kd4.jpg"];
-let photoIndex = 0;
-let photoInterval = null;
+// Text typing
+function startText(){ textTimer=setInterval(()=>{
+  if(textIndex<longMessage.length){
+    secretMessage.innerHTML += longMessage[textIndex];
+    textIndex++;
+  } else { clearInterval(textTimer); showConfetti(); }
+},90);}
+function stopText(){ clearInterval(textTimer); }
 
-function startPhotoSlideshow() {
-  if (photoInterval) return;
+// Photo slideshow
+function startSlideshow(){ photoInterval=setInterval(()=>{
+  photoIndex=(photoIndex+1)%photos.length;
+  profileImg.src=photos[photoIndex];
+},5000);}
+function stopSlideshow(){ clearInterval(photoInterval); }
 
-  photoInterval = setInterval(() => {
-    if (isPaused) return;
-
-    profileImage.style.opacity = 0;
-    setTimeout(() => {
-      photoIndex = (photoIndex + 1) % photos.length;
-      profileImage.src = photos[photoIndex];
-      profileImage.style.opacity = 1;
-    }, 800);
-  }, 4000);
+// Counter
+const startDate = new Date("2024-02-14");
+function updateCounter(){
+  const now = new Date();
+  const diff = now - startDate;
+  const days = Math.floor(diff/86400000);
+  const hours = Math.floor((diff/3600000)%24);
+  const minutes = Math.floor((diff/60000)%60);
+  counter.innerHTML=`💖 ${days} jours ${hours}h ${minutes}min d'amour`;
 }
+setInterval(updateCounter,1000);
+updateCounter();
 
-function stopPhotoSlideshow() {
-  clearInterval(photoInterval);
-  photoInterval = null;
-}
-
-/* ▶️ LANCEMENT */
-revealBtn.addEventListener("click", () => {
-  revealBtn.style.display = "none";
+// Reveal
+revealBtn.addEventListener("click", async ()=>{
+  revealBtn.style.display="none";
   musicBtn.classList.remove("hidden");
+  try{ await music.play(); } catch(e){ console.log("Audio bloqué"); }
 
-  music.play();
-  isPaused = false;
-
-  showMessageSlowly();
-  startPhotoSlideshow();
-  setInterval(createHeart, 400);
-});
-
-/* ⏸️ PLAY / PAUSE TOTAL */
-musicBtn.addEventListener("click", () => {
-  if (music.paused) {
-    music.play();
-    isPaused = false;
-    showMessageSlowly();
-    startPhotoSlideshow();
-    musicBtn.textContent = "⏸️ Pause musique";
-  } else {
-    music.pause();
-    isPaused = true;
-    clearTimeout(typingTimeout);
-    stopPhotoSlideshow();
-    musicBtn.textContent = "▶️ Jouer la musique";
-  }
-});
-
-/* ✨ ANIMATIONS LIÉES À LA MUSIQUE */
-music.addEventListener("play", () => {
+  profileImg.classList.add("profileBlink");
   herName.classList.add("kadigeGlow");
   myName.classList.add("glowBlink");
-  profileImage.classList.add("profileBlink");
+
+  startText();
+  startHearts();
+  startSlideshow();
 });
 
-music.addEventListener("pause", () => {
-  herName.classList.remove("kadigeGlow");
-  myName.classList.remove("glowBlink");
-  profileImage.classList.remove("profileBlink");
+// Music control
+musicBtn.addEventListener("click", ()=>{
+  if(music.paused){
+    music.play();
+    startText();
+    startHearts();
+    startSlideshow();
+    musicBtn.textContent="⏸️ Pause musique";
+  } else {
+    music.pause();
+    stopText();
+    stopHearts();
+    stopSlideshow();
+    musicBtn.textContent="▶️ Play musique";
+  }
 });
 
-music.addEventListener("ended", () => {
-  herName.classList.remove("kadigeGlow");
-  myName.classList.remove("glowBlink");
-  profileImage.classList.remove("profileBlink");
-});
+// Confetti
+function resizeCanvas(){ confettiCanvas.width=window.innerWidth; confettiCanvas.height=window.innerHeight; }
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
+let confettis=[];
+function showConfetti(){
+  for(let i=0;i<200;i++){
+    confettis.push({x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight, r:Math.random()*6+2, d:Math.random()*10+5, color:`hsl(${Math.random()*360},100%,80%)`});
+  }
+  requestAnimationFrame(drawConfetti);
+}
+function drawConfetti(){
+  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  confettis.forEach((c,i)=>{
+    ctx.fillStyle=c.color;
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+    ctx.fill();
+    c.y+=c.d;
+    if(c.y>window.innerHeight){ c.y=-10; c.x=Math.random()*window.innerWidth; }
+  });
+  requestAnimationFrame(drawConfetti);
+}
