@@ -47,9 +47,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
-
+body {
+  overflow-x: hidden; /* horizontal interdit */
+  overflow-y: auto;   /* vertical autorisé pour texte long */
+}
 .container {
   position: relative;
   z-index: 2;
@@ -287,6 +289,7 @@ button {
 #profileImage {
   transition: opacity 1.5s ease-in-out;
 }
+
 
 
 
