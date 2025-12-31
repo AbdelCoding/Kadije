@@ -162,7 +162,7 @@ button {
 
 
 #finalLine {
-  position: fixed;
+  position: relative;
   bottom:   2%;
   width: 100%;
   text-align: center;
@@ -294,5 +294,6 @@ button {
 
 
  
+
 
 
