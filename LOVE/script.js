@@ -3,6 +3,8 @@ const musicBtn = document.getElementById("musicBtn");
 const music = document.getElementById("bgMusic");
 const secretMessage = document.getElementById("secretMessage");
 const counter = document.getElementById("counter");
+let typingTimeout = null;
+let isPaused = false;
 
 /* ⏳ Compteur */
 const startDate = new Date("2024-02-14");
@@ -79,31 +81,30 @@ function showMessageSlowly() {
 }
 
 /* ▶️ Lancement principal */
-revealBtn.addEventListener("click", async () => {
-  revealBtn.style.display = "none";
-  musicBtn.classList.remove("hidden");
-
-  try {
-    await music.play();
-    musicBtn.textContent = "⏸️ Pause musique";
-  } catch (e) {
-    console.log("Audio bloqué");
-  }
-
-  showMessageSlowly();
-  setInterval(createHeart, 400);
-});
-
-/* ⏸️ Play / Pause */
 musicBtn.addEventListener("click", () => {
   if (music.paused) {
     music.play();
+    isPaused = false;
+    showMessageSlowly(); // reprend l'écriture
     musicBtn.textContent = "⏸️ Pause musique";
   } else {
     music.pause();
+    isPaused = true;
+    clearTimeout(typingTimeout); // stop immédiat
     musicBtn.textContent = "▶️ Jouer la musique";
   }
 });
+
+
+function showMessageSlowly() {
+  if (index < longMessage.length && !isPaused) {
+    secretMessage.innerHTML += longMessage.charAt(index);
+    index++;
+
+    typingTimeout = setTimeout(showMessageSlowly, 90);
+  }
+}
+
 
 
 
@@ -223,4 +224,21 @@ music.addEventListener("play", startPhotoSlideshow);
 music.addEventListener("pause", stopPhotoSlideshow);
 music.addEventListener("ended", stopPhotoSlideshow);
 
+
+function createFirework() {
+  const firework = document.createElement("div");
+  firework.className = "firework";
+
+  firework.style.left = Math.random() * 100 + "vw";
+  firework.style.top = Math.random() * 50 + "vh";
+
+  document.body.appendChild(firework);
+
+  setTimeout(() => firework.remove(), 2000);
+}
+
+
+if (index === longMessage.length) {
+  setInterval(createFirework, 600);
+}
 
