@@ -1,335 +1,74 @@
+/* RESET */
+* { margin:0; padding:0; box-sizing:border-box; }
 
-
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 body {
   font-family: 'Playfair Display', serif;
+  color:white;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-x:hidden;
+  overflow-y:auto;
+  background:black;
 }
 
-
-
-
-/* 🎬 Background image */
 .background {
   position: fixed;
-  inset: 0;
+  inset:0;
   background: url("kd1.jpg") center / cover no-repeat;
   animation: slowZoom 40s ease-in-out infinite alternate;
-  z-index: 0;
+  z-index:0;
 }
+@keyframes slowZoom { from {transform:scale(1);} to {transform:scale(1.12);} }
 
-/* 🎥 Zoom lent */
-@keyframes slowZoom {
-  from { transform: scale(1); }
-  to { transform: scale(1.12); }
-}
-
-/* 🔲 Overlay pro */
 .overlay {
   position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,.75), rgba(0,0,0,.35)),
-    radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.6) 70%);
+  inset:0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.75), rgba(0,0,0,.35));
   backdrop-filter: blur(6px);
-  z-index: 1;
-}
-
-/* 💖 Contenu */
-body {
-  min-height: 100vh;
- 
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-body {
-  overflow-x: hidden; /* horizontal interdit */
-  overflow-y: auto;   /* vertical autorisé pour texte long */
-}
-.container {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-  text-align: center;
-  padding: 30px;
-}
-
-/* Texte */
-h1 {
-  font-size: 1.25rem;
-  line-height: 1.7;
-}
-
-h1 span {
-  color: #ffb3c1;
-}
-
-/* Boutons */
-button {
-  margin-top: 20px;
-  background: #ff4d6d;
-  border: none;
-  color: white;
-  padding: 12px 28px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.music-btn {
-  background: rgba(255,255,255,0.15);
-}
-
-.hidden {
-  display: none;
-}
-
-/* 💖 Cœurs */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 20px;
-  animation: floatUp 7s linear forwards;
-  z-index: 3;
-}
-
-@keyframes floatUp {
-  to {
-    transform: translateY(-120vh) scale(1.5);
-    opacity: 0;
-  }
-}
-/* lyrics */
-#lyrics {
-  margin-top: 25px;
-  font-size: 1.3rem;
-  color: #ffb3c1;
-  min-height: 40px;
-  transition: opacity 0.5s;
-}
-
-/* message-long */
-.message-long {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: #ffd6e0;
-  max-width: 900px;
-  margin: auto;
-}
-
-
- .overlay {
+  z-index:1;
   animation: breathe 10s ease-in-out infinite;
 }
+@keyframes breathe { 0%,100{background-color:rgba(0,0,0,0.65);}50%{background-color:rgba(0,0,0,0.5);} }
 
-@keyframes breathe {
-  0%, 100% { background-color: rgba(0,0,0,0.65); }
-  50% { background-color: rgba(0,0,0,0.5); }
-}
-
-
-#finalLine {
-  position: fixed;
-  margin-top:10px;
-  width: 100%;
-  text-align: center;
-  font-size: 2rem;
-  color: #ffb3c1;
-  opacity: 0;
-  animation: fadeIn 3s ease forwards;
-  animation-delay: 40s;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/*style du feu d'antifixe  */
-.firework {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffd6e0, #ff4d6d);
-  animation: explode 1.8s ease-out forwards;
-  z-index: 0; /* derrière le texte */
-}
-
-@keyframes explode {
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(12);
-    opacity: 0;
-  }
-}
-
-
-
-
-
-#secretMessage {
-  transform: perspective(600px) rotateX(10deg);
-}
-
-
-#finalLine {
-  position: relative;
-  bottom:   2%;
-  width: 100%;
-  text-align: center;
-  font-size: 2rem;
-  color: #ffb3c1;
-  opacity: 0;
-  animation: fadeIn 3s ease forwards;
-  animation-delay: 92s;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
+.container { position:relative; z-index:2; max-width:800px; text-align:center; padding:20px; }
 
 .profile-pic img {
-  width: 130px;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #ffb3c1;
+  width:130px; height:130px; object-fit:cover;
+  border-radius:50%;
+  border:3px solid #ffb3c1;
+  transition: all 1s ease-in-out;
 }
 
-/* animation forte */
-.profileBlink {
-  animation: strongBlink 1s ease-in-out infinite;
-}
-
+.profileBlink { animation: strongBlink 1s ease-in-out infinite; }
 @keyframes strongBlink {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 15px rgba(255,179,193,0.7),
-                0 0 30px rgba(255,179,193,0.8);
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.3;
-    box-shadow: 0 0 40px rgba(255,179,193,1),
-                0 0 70px rgba(255,179,193,1);
-    transform: scale(1.05);
-  }
+  0%,100% {opacity:1; box-shadow:0 0 15px rgba(255,179,193,0.7); transform:scale(1);}
+  50% {opacity:0.3; box-shadow:0 0 40px rgba(255,179,193,1); transform:scale(1.05);}
 }
 
+h1 { font-size:4vw; line-height:1.5; max-width:90%; margin:20px auto; word-wrap: break-word; }
+h1 span { color:#ffb3c1; font-weight:600; }
 
-/* lumière douce */
-@keyframes softGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 179, 193, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 35px rgba(255, 179, 193, 0.9);
-  }
-}
+button { margin-top:20px; background:#ff4d6d; border:none; color:white; padding:12px 28px; border-radius:30px; cursor:pointer; font-size:1rem; }
+.music-btn { background: rgba(255,255,255,0.15); }
+.hidden { display:none; }
 
+.heart { position: fixed; bottom:-20px; font-size:20px; animation: floatUp 7s linear forwards; z-index:3; }
+@keyframes floatUp { to { transform: translateY(-120vh) scale(1.5); opacity:0; } }
 
-#myName {
-  display: inline-block;
-  font-weight: 500;
-}
+#secretMessage { font-size:1.2rem; line-height:1.5; color:#ffd6e0; max-width:90%; margin:20px auto; white-space:pre-wrap; word-wrap:break-word; }
 
-/* animation active */
-.glowBlink {
-  animation: 
-    blinkSoft 1.8s ease-in-out infinite,
-    colorFlow 6s ease-in-out infinite,
-    glowSoft 3s ease-in-out infinite;
-}
+#finalLine { position: relative; bottom:10%; width:100%; text-align:center; font-size:1.8rem; color:#ffb3c1; opacity:0; animation: fadeIn 3s ease forwards; animation-delay:20s; }
+@keyframes fadeIn { to { opacity:1; } }
 
-/* clignotement doux */
-@keyframes blinkSoft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
+.glowBlink { animation: blinkSoft 1.8s ease-in-out infinite, colorFlow 6s ease-in-out infinite, glowSoft 3s ease-in-out infinite; }
+@keyframes blinkSoft {0%,100%{opacity:1;}50%{opacity:0.4;}}
+@keyframes colorFlow {0%{color:#ffb3c1;}33%{color:#ffd6e0;}66%{color:#ffc2d1;}100%{color:#ffb3c1;}}
+@keyframes glowSoft {0%,100%{text-shadow:0 0 5px rgba(255,179,193,0.5);}50%{text-shadow:0 0 18px rgba(255,179,193,0.9);}}
 
-/* changement de couleur */
-@keyframes colorFlow {
-  0%   { color: #ffb3c1; }
-  33%  { color: #ffd6e0; }
-  66%  { color: #ffc2d1; }
-  100% { color: #ffb3c1; }
-}
+.kadigeGlow { animation: kadigeColor 8s ease-in-out infinite, kadigeGlow 4s ease-in-out infinite; }
+@keyframes kadigeColor {0%{color:#ffd6e0;}33%{color:#ffb3c1;}66%{color:#ffe5ec;}100%{color:#ffd6e0;}}
+@keyframes kadigeGlow {0%,100%{text-shadow:0 0 8px rgba(255,182,193,0.6);}50%{text-shadow:0 0 22px rgba(255,182,193,1);} }
 
-/* lumière autour */
-@keyframes glowSoft {
-  0%, 100% {
-    text-shadow: 0 0 5px rgba(255,179,193,0.5);
-  }
-  50% {
-    text-shadow: 0 0 18px rgba(255,179,193,0.9);
-  }
-}
-
-#herName {
-  display: inline-block;
-  font-weight: 600;
-}
-
-/* animation spéciale Kadige */
-.kadigeGlow {
-  animation:
-    kadigeColor 8s ease-in-out infinite,
-    kadigeGlow 4s ease-in-out infinite;
-}
-
-/* couleurs plus tendres */
-@keyframes kadigeColor {
-  0%   { color: #ffd6e0; }
-  33%  { color: #ffb3c1; }
-  66%  { color: #ffe5ec; }
-  100% { color: #ffd6e0; }
-}
-
-/* halo doux */
-@keyframes kadigeGlow {
-  0%, 100% {
-    text-shadow: 0 0 8px rgba(255,182,193,0.6);
-  }
-  50% {
-    text-shadow: 0 0 22px rgba(255,182,193,1);
-  }
-}
-
-
-#profileImage {
-  transition: opacity 1.5s ease-in-out;
-}
-
-
-
-
- 
-/* 🎆 FEUX D’ARTIFICE – CANVAS */
-/* 🎆 CANVAS FEUX D'ARTIFICE */
-#fireworksCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;             /* juste au-dessus du background et overlay */
-  pointer-events: none;   /* pas de blocage des clics */
-}
-
-
-
-
-
-
-
-
+canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:5; }
