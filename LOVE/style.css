@@ -314,6 +314,16 @@ button {
 
 
  
+/* 🎆 FEUX D’ARTIFICE – CANVAS */
+#fireworksCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;              /* derrière le contenu */
+  pointer-events: none;   /* ne bloque pas les clics */
+}
+
 
 
 
