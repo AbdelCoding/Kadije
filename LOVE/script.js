@@ -3,10 +3,15 @@ const musicBtn = document.getElementById("musicBtn");
 const music = document.getElementById("bgMusic");
 const secretMessage = document.getElementById("secretMessage");
 const counter = document.getElementById("counter");
+const profileImage = document.getElementById("profileImage");
+const herName = document.getElementById("herName");
+const myName = document.getElementById("myName");
+
 let typingTimeout = null;
 let isPaused = false;
+let index = 0;
 
-/* ⏳ Compteur */
+/* ⏳ COMPTEUR */
 const startDate = new Date("2024-02-14");
 
 function updateCounter() {
@@ -22,12 +27,9 @@ function updateCounter() {
 setInterval(updateCounter, 1000);
 updateCounter();
 
-/* 💖 Cœurs */
+/* 💖 CŒURS */
 function createHeart() {
   const heart = document.createElement("div");
-//   heart.innerHTML = "🤍";
-// heart.style.opacity = "0.6";
-
   heart.className = "heart";
   heart.innerHTML = "💖";
   heart.style.left = Math.random() * 100 + "vw";
@@ -35,9 +37,7 @@ function createHeart() {
   setTimeout(() => heart.remove(), 7000);
 }
 
-
-
-/* 💌 Message long */
+/* 💌 TEXTE EXACT (INCHANGÉ) */
 const longMessage = `
 Kadige…
 
@@ -68,177 +68,87 @@ Pour la vie.
 — Ton  Njibah 💫
 `;
 
-
-let index = 0;
 secretMessage.innerHTML = "";
 
-function showMessageSlowly() {
-  if (index < longMessage.length) {
-    secretMessage.innerHTML += longMessage.charAt(index);
-    index++;
-    setTimeout(showMessageSlowly, 100);
-  }
-}
-
-/* ▶️ Lancement principal */
-musicBtn.addEventListener("click", () => {
-  if (music.paused) {
-    music.play();
-    isPaused = false;
-    showMessageSlowly(); // reprend l'écriture
-    musicBtn.textContent = "⏸️ Pause musique";
-  } else {
-    music.pause();
-    isPaused = true;
-    clearTimeout(typingTimeout); // stop immédiat
-    musicBtn.textContent = "▶️ Jouer la musique";
-  }
-});
-
-
+/* ✍️ ÉCRITURE LENTE (PAUSE SAFE) */
 function showMessageSlowly() {
   if (index < longMessage.length && !isPaused) {
     secretMessage.innerHTML += longMessage.charAt(index);
     index++;
-
     typingTimeout = setTimeout(showMessageSlowly, 90);
   }
 }
 
-
-
-
-
-
-
-function fadeOutMusic(duration = 8000) {
-  const step = music.volume / (duration / 100);
-  const fade = setInterval(() => {
-    if (music.volume > step) {
-      music.volume -= step;
-    } else {
-      music.volume = 0;
-      music.pause();
-      clearInterval(fade);
-    }
-  }, 100);
-}
-
-
-// recliquer sur le bouton
-music.addEventListener("ended", resetExperience);
-music.addEventListener("pause", () => {
-  if (music.currentTime > 5) {
-    resetExperience();
-  }
-});
-
-function resetExperience() {
-  revealBtn.style.display = "inline-block";
-  revealBtn.textContent = "Clique ici mon amour 💖";
-
-  musicBtn.classList.add("hidden");
-
-  secretMessage.innerHTML = "";
-  index = 0;
-
-  music.currentTime = 0;
-  music.volume = 1;
-}
-
-
-music.addEventListener("play", () => {
-  myName.classList.add("glowBlink");
-});
-
-music.addEventListener("pause", () => {
-  myName.classList.remove("glowBlink");
-});
-
-music.addEventListener("ended", () => {
-  myName.classList.remove("glowBlink");
-});
-
-
-const herName = document.getElementById("herName");
-
-music.addEventListener("play", () => {
-  herName.classList.add("kadigeGlow");
-});
-
-music.addEventListener("pause", () => {
-  herName.classList.remove("kadigeGlow");
-});
-
-music.addEventListener("ended", () => {
-  herName.classList.remove("kadigeGlow");
-});
-
-
-const profileImg = document.querySelector(".profile-pic img");
-
-music.addEventListener("play", () => {
-  profileImg.classList.add("profileBlink");
-});
-
-music.addEventListener("pause", () => {
-  profileImg.classList.remove("profileBlink");
-});
-
-music.addEventListener("ended", () => {
-  profileImg.classList.remove("profileBlink");
-});
-
-
-const photos = [
-  "kd1.jpg",
-  "kd5.jpg",
-  "kd2.jpg",
-  "kd4.jpg"
-  // "kd5.jpg"
-];
-
+/* 🖼️ SLIDESHOW */
+const photos = ["kd1.jpg", "kd5.jpg", "kd2.jpg", "kd4.jpg"];
 let photoIndex = 0;
-const profileImage = document.getElementById("profileImage");
 let photoInterval = null;
 
 function startPhotoSlideshow() {
-  photoInterval = setInterval(() => {
-    profileImage.style.opacity = 0;
+  if (photoInterval) return;
 
+  photoInterval = setInterval(() => {
+    if (isPaused) return;
+
+    profileImage.style.opacity = 0;
     setTimeout(() => {
       photoIndex = (photoIndex + 1) % photos.length;
       profileImage.src = photos[photoIndex];
       profileImage.style.opacity = 1;
-    }, 1500);
-
-  }, 5000); // change toutes les 5 secondes
+    }, 800);
+  }, 4000);
 }
 
 function stopPhotoSlideshow() {
   clearInterval(photoInterval);
+  photoInterval = null;
 }
 
+/* ▶️ LANCEMENT */
+revealBtn.addEventListener("click", () => {
+  revealBtn.style.display = "none";
+  musicBtn.classList.remove("hidden");
 
-music.addEventListener("play", startPhotoSlideshow);
-music.addEventListener("pause", stopPhotoSlideshow);
-music.addEventListener("ended", stopPhotoSlideshow);
+  music.play();
+  isPaused = false;
 
+  showMessageSlowly();
+  startPhotoSlideshow();
+  setInterval(createHeart, 400);
+});
 
-function createFirework() {
-  const firework = document.createElement("div");
-  firework.className = "firework";
+/* ⏸️ PLAY / PAUSE TOTAL */
+musicBtn.addEventListener("click", () => {
+  if (music.paused) {
+    music.play();
+    isPaused = false;
+    showMessageSlowly();
+    startPhotoSlideshow();
+    musicBtn.textContent = "⏸️ Pause musique";
+  } else {
+    music.pause();
+    isPaused = true;
+    clearTimeout(typingTimeout);
+    stopPhotoSlideshow();
+    musicBtn.textContent = "▶️ Jouer la musique";
+  }
+});
 
-  firework.style.left = Math.random() * 100 + "vw";
-  firework.style.top = Math.random() * 50 + "vh";
+/* ✨ ANIMATIONS LIÉES À LA MUSIQUE */
+music.addEventListener("play", () => {
+  herName.classList.add("kadigeGlow");
+  myName.classList.add("glowBlink");
+  profileImage.classList.add("profileBlink");
+});
 
-  document.body.appendChild(firework);
+music.addEventListener("pause", () => {
+  herName.classList.remove("kadigeGlow");
+  myName.classList.remove("glowBlink");
+  profileImage.classList.remove("profileBlink");
+});
 
-  setTimeout(() => firework.remove(), 2000);
-}
-
-
-if (index === longMessage.length) {
-  setInterval(createFirework, 600);
-}
-
+music.addEventListener("ended", () => {
+  herName.classList.remove("kadigeGlow");
+  myName.classList.remove("glowBlink");
+  profileImage.classList.remove("profileBlink");
+});
